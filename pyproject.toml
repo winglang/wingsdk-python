@@ -1,3 +1,10 @@
+[project]
+name = "wingsdk"
+version = "0.0.1"
+description = "Wing SDK in Python"
+authors = ["eladc <eladc@wing.cloud>"]
+readme = "README.md"
+
 [tool.poetry]
 name = "wingsdk"
 version = "0.0.1"
