@@ -2,7 +2,7 @@
 name = "wingsdk"
 version = "0.0.1"
 description = "Wing SDK in Python"
-authors = ["eladc <eladc@wing.cloud>"]
+authors = [{name = "Elad Cohen", email = "eladc <eladc@wing.cloud>"}]
 readme = "README.md"
 
 [tool.poetry]
