@@ -136,7 +136,7 @@ class DynamodbTableClient_sim(DynamodbTableClient_base):
       aws_secret_access_key=connection["clientConfig"]["credentials"]["secretAccessKey"],
     ))
 
-class SNSMobileClient_sim:
+class SNSMobileNotifications_sim:
   def __init__(self, store: BucketClient_sim):
     self.store = store
 
@@ -147,7 +147,7 @@ class SNSMobileClient_sim:
       "MessageId": id,
     }
   
-class SNSMobileClient_aws:
+class SNSMobileNotifications_aws:
   def __init__(self, client: boto3.client = None):
     self.client = client or boto3.client('sns')
 
@@ -205,11 +205,11 @@ def create_client(idValue: dict):
       return DynamodbTableClient_aws(idValue["props"])
     elif target == "sim":
       return DynamodbTableClient_sim(idValue["props"])
-  if idValue["type"] == "@winglibs.sns.MobileClient":
+  if idValue["type"] == "@winglibs.sns.MobileNotifications":
     if target == "aws":
-      return SNSMobileClient_aws(idValue["props"])
+      return SNSMobileNotifications_aws(idValue["props"])
     elif target == "sim":
-      return SNSMobileClient_sim(create_client(idValue["children"]["store"]))
+      return SNSMobileNotifications_sim(create_client(idValue["children"]["store"]))
   if idValue["type"] == "@winglibs.ses.EmailService":
     if target == "aws":
       return SESEmailService_aws(idValue["props"])
