@@ -191,7 +191,6 @@ def lifted(id: str):
     if id in jsonValue:
       return create_client(jsonValue[id])
       
-  print(f"Client with id={id} not found")
   raise Exception(f"Client not found (id={id}).")
 
 def create_client(idValue: dict):
@@ -216,18 +215,12 @@ def create_client(idValue: dict):
       return SESEmailService_aws(idValue["props"])
     elif target == "sim":
       return SESEmailService_sim(create_client(idValue["children"]["store"]))
-
-def _set_context(event):
-  context = json.loads(event["context"])
-  for key, value in context.items():
-    os.environ[key] = value
-
+        
 def from_function_event(event):
   target = os.getenv(f"WING_TARGET")
   if target == "tf-aws":
     return str(event)
   elif target == "sim":
-    _set_context(event)
     payload = event["payload"]
     return payload if isinstance(payload, str) else json.dumps(payload)
   else:
@@ -238,7 +231,6 @@ def from_topic_event(event):
   if target == "tf-aws":
     return [event["Records"][0]["Sns"]["Message"]]
   elif target == "sim":
-    _set_context(event)
     return [str(event["payload"])]
   else:
     raise Exception(f"Unsupported target: {target}")
@@ -248,7 +240,6 @@ def from_queue_event(event):
   if target == "tf-aws":
     return [event["Records"][0]["body"]]
   elif target == "sim":
-    _set_context(event)
     return [str(event["payload"])]
   else:
     raise Exception(f"Unsupported target: {target}")
@@ -267,7 +258,6 @@ def from_bucket_event(event):
     bucket_event.type = os.getenv("WING_BUCKET_EVENT")
     return [bucket_event]
   elif target == "sim":
-    _set_context(event)
     data = event["payload"]
     bucket_event = BucketEvent()
     bucket_event.key = data["key"]
@@ -297,7 +287,6 @@ def from_api_event(event):
     }
     return req
   elif target == "sim":
-    _set_context(event)
     data = event["payload"]
     req: ApiRequest = {
       'method': data["method"],
@@ -344,7 +333,6 @@ class Aws:
     if target == "tf-aws":
       return req
     elif target == "sim":
-      _set_context(event)
       data = event["payload"]
       body = data["body"]
       req = {
