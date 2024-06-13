@@ -1,6 +1,6 @@
 [project]
 name = "wingsdk"
-version = "0.0.2"
+version = "0.0.3"
 description = "Wing SDK in Python"
 authors = [{name = "Elad Cohen", email = "eladc@wing.cloud"}]
 readme = "README.md"
