@@ -178,6 +178,9 @@ class SESEmailService_aws:
   def send_raw_email(self, **kwargs):
     return self.client.send_raw_email(**kwargs)
 
+class Liftable(TypedDict):
+  liftData: dict
+
 def try_lifted(id: str):
   try:
     return lifted(id)
@@ -215,6 +218,8 @@ def create_client(idValue: dict):
       return SESEmailService_aws(idValue["props"])
     elif target == "sim":
       return SESEmailService_sim(create_client(idValue["children"]["store"]))
+  if idValue["type"] == "@winglibs.python.ILiftable":
+    return Liftable(idValue["props"])
         
 def from_function_event(event):
   target = os.getenv(f"WING_TARGET")
